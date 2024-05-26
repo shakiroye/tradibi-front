@@ -1,11 +1,10 @@
-'use client'
-
 import { useState } from 'react';
 
 export default function Page() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+  const [message, setMessage] = useState('');
 
   const validate = () => {
     let valid = true;
@@ -28,12 +27,27 @@ export default function Page() {
     return valid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      // Handle form submission
-      console.log('Form submitted:', { username, password });
-    }
+      try {
+        const response = await fetch('https://tradibi.netlify.app/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({  username, password }),
+        });
+
+        if (response.ok) {
+          setMessage('login successful!');
+        } else {
+          const data = await response.json();
+          setMessage(`Login failed: ${data.message}`);
+        }
+      } catch (error) {
+        setMessage(`Login failed`);
+      }    }
   };
 
   return (
