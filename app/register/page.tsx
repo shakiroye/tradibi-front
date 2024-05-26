@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 
@@ -62,11 +63,14 @@ export default function Page() {
           body: JSON.stringify({ email, username, password, confirmPassword, name }),
         });
 
+        console.log(email, username, password, confirmPassword, name );
+        
+
         if (response.ok) {
           setMessage('Registration successful! Redirecting to login...');
           setTimeout(() => {
             router.push('/login');
-          }, 2000);
+          }, 1000);
         } else {
           const data = await response.json();
           setMessage(`Registration failed: ${data.message}`);

@@ -1,6 +1,10 @@
+"use client"
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
+  const router = useRouter();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
@@ -39,21 +43,28 @@ export default function Page() {
           body: JSON.stringify({  username, password }),
         });
 
+        const data = await response.json();
+        
+
         if (response.ok) {
-          setMessage('login successful!');
+          setMessage('Login successful!');
+          localStorage.setItem('userId', data.user.id)
+          router.push('/announcements');
         } else {
           const data = await response.json();
-          setMessage(`Login failed: ${data.message}`);
+          setMessage(`Login failed`);
         }
       } catch (error) {
-        setMessage(`Login failed`);
-      }    }
+        setMessage('Login failed');
+      }
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-4 bg-white shadow-md rounded-md">
         <h1 className="text-2xl font-bold text-center">Login</h1>
+        {message && <p className={`text-center ${message.includes('failed') ? 'text-red-600' : 'text-green-600'}`}>{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
