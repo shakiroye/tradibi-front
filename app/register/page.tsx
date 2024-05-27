@@ -173,6 +173,8 @@ export default function Page() {
             >
               Sign Up
             </button>
+            <p>Déja un compte ? <a href="/login" className="text-blue-600">Se connecter</a></p>
+
           </div>
         </form>
       </div>

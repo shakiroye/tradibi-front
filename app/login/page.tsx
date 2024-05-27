@@ -103,6 +103,7 @@ export default function Page() {
             >
               Login
             </button>
+            <p>Pas de compte ? <a href="/register" className="text-blue-600">S'enregistrer</a></p>
           </div>
         </form>
       </div>
