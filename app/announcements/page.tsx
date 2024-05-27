@@ -68,7 +68,7 @@ export default function AnnouncementsList() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-7xl p-8">
-        <h1 className="text-2xl font-bold text-center mb-8">Announcements</h1>
+        <h1 className="text-2xl font-bold text-center mb-8">Les annonces</h1>
         {message && (
           <div className={`p-4 ${message.includes('Failed') || message.includes('Error') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'} rounded-md mb-8`}>
             {message}

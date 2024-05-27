@@ -108,7 +108,7 @@ export default function Page() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-4 bg-white shadow-md rounded-md">
-        <h1 className="text-2xl font-bold text-center">Edit Announcement</h1>
+        <h1 className="text-2xl font-bold text-center">Modifier une annonce</h1>
         {message && (
           <div className={`p-4 ${message.includes('successfully') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} rounded-md`}>
             {message}
@@ -148,7 +148,7 @@ export default function Page() {
               onChange={(e) => setTypeAnnouncementId(e.target.value)}
               className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             >
-              <option value="">Select a type</option>
+              <option value="">Selectionnez un type</option>
               {types.map((type: any) => (
                 <option key={type.id} value={type.id}>
                   {type.title}
@@ -166,7 +166,7 @@ export default function Page() {
               onChange={(e) => setCategoryAnnouncementId(e.target.value)}
               className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             >
-              <option value="">Select a category</option>
+              <option value="">Selectionnez une categorie</option>
               {categories.map((category: any) => (
                 <option key={category.id} value={category.id}>
                   {category.title}
@@ -179,7 +179,7 @@ export default function Page() {
               type="submit"
               className="w-full px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
             >
-              Update Announcement
+              Modifier une annonce
             </button>
           </div>
         </form>
