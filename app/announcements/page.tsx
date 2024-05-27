@@ -27,7 +27,7 @@ export default function AnnouncementsList() {
         } else {
           setMessage('Failed to fetch announcements');
         }
-      } catch (error:any) {
+      } catch (error: any) {
         setMessage(`Error: ${error.message}`);
       }
     }
@@ -43,7 +43,7 @@ export default function AnnouncementsList() {
     if (!window.confirm('Voulez-vous supprimer cette annonce ?')) {
       return;
     }
-    
+
     try {
       const response = await fetch(`https://tradibi.netlify.app/api/announcements/${id}`, {
         method: 'DELETE',
@@ -56,9 +56,13 @@ export default function AnnouncementsList() {
         const data = await response.json();
         setMessage(`Failed to delete announcement: ${data.message}`);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       setMessage(`Error: ${error.message}`);
     }
+  };
+
+  const handleDetails = (id: string) => {
+    router.push(`/announcements/${id}`);
   };
 
   return (
@@ -82,6 +86,12 @@ export default function AnnouncementsList() {
               )}
               <h2 className="text-xl font-bold mb-2">{announcement.title}</h2>
               <p className="text-gray-700 mb-4">{announcement.description}</p>
+              <button
+                onClick={() => handleDetails(announcement.id)}
+                className="w-full px-4 py-2 mb-2 font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-300"
+              >
+                Détail
+              </button>
               <button
                 onClick={() => handleEdit(announcement.id)}
                 className="w-full px-4 py-2 mb-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
