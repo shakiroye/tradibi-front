@@ -1,10 +1,9 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'
+import { useRouter,useParams } from 'next/navigation';
 
-export default function CreateAnnouncement() {
-    const router = useRouter();
-    const [title, setTitle] = useState('');
+export default function Page() {
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [userId, setUserId] = useState('');
@@ -13,6 +12,8 @@ export default function CreateAnnouncement() {
   const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState('');
+  const router = useRouter();
+  const { id } = useParams();
 
   useEffect(() => {
     // Fetch types and categories
@@ -30,8 +31,8 @@ export default function CreateAnnouncement() {
 
         setTypes(typesData);
         setCategories(categoriesData);
-      } catch (error) {
-        setMessage(`Error fetching types or categories: `);
+      } catch (error:any) {
+        setMessage(`Error fetching types or categories: ${error.message}`);
       }
     }
 
@@ -42,7 +43,29 @@ export default function CreateAnnouncement() {
     if (storedUserId) {
       setUserId(storedUserId);
     }
-  }, []);
+
+    // Fetch the announcement details
+    async function fetchAnnouncementDetails() {
+      try {
+        const response = await fetch(`https://tradibi.netlify.app/api/announcements/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setTitle(data.title);
+          setDescription(data.description);
+          setTypeAnnouncementId(data.typeAnnouncementId);
+          setCategoryAnnouncementId(data.categoryAnnouncementId);
+          // Assume image URL is stored, set it if available
+          setImage(data.image ? data.image : null);
+        } else {
+          setMessage('Failed to fetch announcement details');
+        }
+      } catch (error:any) {
+        setMessage(`Error: ${error.message}`);
+      }
+    }
+
+    fetchAnnouncementDetails();
+  }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,45 +78,37 @@ export default function CreateAnnouncement() {
     let parsedType =Number(typeAnnouncementId)
     let parsedCategory =Number(categoryAnnouncementId)
 
-   const dataToSend = {
-    "title": title,
-    "description": description,
-    "image": urlImage,
-    "userId": parsedId,
-    "typeAnnouncementId": parsedType,
-    "categoryAnnouncementId": parsedCategory
-  }
-  
-
-console.log(dataToSend);
-
-console.log(parsedId);
+    const dataToSend = {
+      "title": title,
+      "description": description,
+      "image": urlImage,
+      "userId": parsedId,
+      "typeAnnouncementId": parsedType,
+      "categoryAnnouncementId": parsedCategory
+    }
 
     try {
-      const response = await fetch('https://tradibi.netlify.app/api/announcements', {
-        method: 'POST',
+      const response = await fetch(`https://tradibi.netlify.app/api/announcements/${id}`, {
+        method: 'PUT',
         body: JSON.stringify(dataToSend),
       });
 
-      console.log(response.json);
-      
-
       if (response.ok) {
-        setMessage('Announcement created successfully!');
-        router.push('/announcements');
+        setMessage('Announcement updated successfully!');
+        router.push('/announcements'); // redirect to the announcements list
       } else {
         const data = await response.json();
-        setMessage(`Failed to create announcement: ${data.message}`);
+        setMessage(`Failed to update announcement: ${data.message}`);
       }
-    } catch (error) {
-      setMessage(`Error: `);
+    } catch (error:any) {
+      setMessage(`Error: ${error.message}`);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-4 bg-white shadow-md rounded-md">
-        <h1 className="text-2xl font-bold text-center">Create Announcement</h1>
+        <h1 className="text-2xl font-bold text-center">Edit Announcement</h1>
         {message && (
           <div className={`p-4 ${message.includes('successfully') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} rounded-md`}>
             {message}
@@ -123,17 +138,6 @@ console.log(parsedId);
               className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
-          {/* <div>
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-              Image
-            </label>
-            <input
-              type="file"
-              id="image"
-              onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
-              className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            />
-          </div> */}
           <div>
             <label htmlFor="typeAnnouncementId" className="block text-sm font-medium text-gray-700">
               Type
@@ -175,7 +179,7 @@ console.log(parsedId);
               type="submit"
               className="w-full px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
             >
-              Create Announcement
+              Update Announcement
             </button>
           </div>
         </form>
