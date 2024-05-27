@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 
+
 interface Announcement {
   id: string;
   title: string;
@@ -34,6 +35,7 @@ export default function AnnouncementsList() {
   }, []);
 
   return (
+
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-7xl p-8">
         <h1 className="text-2xl font-bold text-center mb-8">Announcements</h1>

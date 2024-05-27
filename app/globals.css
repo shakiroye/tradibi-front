@@ -74,3 +74,7 @@
       @apply bg-background text-foreground;
     }
   }
+
+  .tradibi-primary-btn {
+    @apply bg-sky-800 text-white px-4 py-2 rounded;
+  }
